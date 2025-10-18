@@ -1,6 +1,10 @@
 [submodule "libs/linux-syscall-support"]
 	path = libs/linux-syscall-support
 	url = https://chromium.googlesource.com/linux-syscall-support
-[submodule "libs/rust"]
-	path = libs/rust
-	url = https://github.com/qwq233/nullgram-rs
+[submodule "TMessagesProj/jni/ffmpeg"]
+	path = TMessagesProj/jni/ffmpeg
+	url = https://github.com/FFmpeg/FFmpeg.git
+	ignore = all
+[submodule "TMessagesProj/jni/libvpx"]
+	path = TMessagesProj/jni/libvpx
+	url = https://github.com/webmproject/libvpx.git
