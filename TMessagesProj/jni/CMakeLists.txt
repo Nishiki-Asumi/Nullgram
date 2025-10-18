@@ -57,9 +57,6 @@ set_target_properties(ssl PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/b
 add_library(libvpx STATIC IMPORTED)
 set_target_properties(libvpx PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libvpx.a)
 
-add_library(rust STATIC IMPORTED)
-set_target_properties(rust PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/integrity/${ANDROID_ABI}/librust.a.22)
-
 add_library(libdav1d STATIC IMPORTED)
 set_target_properties(libdav1d PROPERTIES IMPORTED_LOCATION ${CMAKE_HOME_DIRECTORY}/ffmpeg/${ANDROID_ABI}/libdav1d.a)
 
@@ -100,8 +97,6 @@ target_include_directories(tgnet PUBLIC
         boringssl/include/)
 target_link_libraries(tgnet PUBLIC
         crypto)
-target_link_libraries(tgnet INTERFACE
-        rust)
 
 #rlottie
 add_library(rlottie STATIC
@@ -213,8 +208,6 @@ target_compile_definitions(sqlite PUBLIC
 
 #voip
 include(${CMAKE_HOME_DIRECTORY}/voip/CMakeLists.txt)
-
-include(${CMAKE_HOME_DIRECTORY}/integrity/CMakeLists.txt)
 
 # cpu features
 include_directories(${ANDROID_NDK}/sources/android/cpufeatures)
@@ -494,7 +487,6 @@ target_include_directories(${NATIVE_LIB} PUBLIC
         intro
         rlottie/inc
         tgcalls/
-        integrity/include/
         webrtc/
         tde2e/include
 )
@@ -507,7 +499,6 @@ target_link_libraries(${NATIVE_LIB}
         tgcalls
         tgcalls_tp
         tgnet
-        rust
         flac
         rlottie
         sqlite
@@ -528,12 +519,10 @@ target_link_libraries(${NATIVE_LIB}
         EGL
         android
         OpenSLES
-        cpufeatures
-        checkSignature)
+        cpufeatures)
 
 #if (${ANDROID_ABI} STREQUAL "x86" OR ${ANDROID_ABI} STREQUAL "x86_64")
 #    target_link_libraries(${NATIVE_LIB}
 #            -Wl,--whole-archive vpxasm -Wl,--no-whole-archive
 #            c)
 #endif()
-

@@ -34,7 +34,6 @@ mlkitVision = "16.0.0-beta1"
 processPhoenix = "3.0.0"
 sharetarget = "1.2.0"
 paletteKtx = "1.0.0"
-rust = "0.9.6"
 nanohttpd = "2.3.1"
 mediarouter = "1.8.1"
 
@@ -92,4 +91,3 @@ firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "
 google-services = { id = "com.google.gms.google-services", version.ref = "gms" }
 triplet-play = { id = "com.github.triplet.play", version = "3.12.1" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-rust = { id = "org.mozilla.rust-android-gradle.rust-android", version.ref = "rust" }

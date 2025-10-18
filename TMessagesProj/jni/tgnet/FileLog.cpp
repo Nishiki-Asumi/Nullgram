@@ -19,10 +19,8 @@
 #ifdef DEBUG_VERSION
 bool LOGS_ENABLED = true;
 #else
-bool LOGS_ENABLED = true;
+bool LOGS_ENABLED = false;
 #endif
-
-#include "../integrity/include/rust.h"
 
 bool REF_LOGS_ENABLED = false;
 
@@ -47,25 +45,68 @@ void FileLog::fatal(const char *message, ...) {
     if (!LOGS_ENABLED) {
         return;
     }
-    char buf[256];
-
     va_list argptr;
     va_start(argptr, message);
-    vsnprintf(buf, 256, message, argptr);
-    loge("tgnet fatal", buf);
+
+    struct timeval time_now;
+    gettimeofday(&time_now, NULL);
+    struct tm *now = localtime(&time_now.tv_sec);
+#ifdef ANDROID
+    __android_log_vprint(ANDROID_LOG_FATAL, "tgnet", message, argptr);
     va_end(argptr);
+    va_start(argptr, message);
+#else
+    printf("%d-%d %02d:%02d:%02d FATAL ERROR: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+    vprintf(message, argptr);
+    printf("\n");
+    fflush(stdout);
+    va_end(argptr);
+    va_start(argptr, message);
+#endif
+    FILE *logFile = getInstance().logFile;
+    if (logFile) {
+        fprintf(logFile, "%d-%d %02d:%02d:%02d.%03d FATAL ERROR: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec, (int) (time_now.tv_usec / 1000));
+        vfprintf(logFile, message, argptr);
+        fprintf(logFile, "\n");
+        fflush(logFile);
+    }
+
+    va_end(argptr);
+
+#ifdef DEBUG_VERSION
+    abort();
+#endif
 }
 
 void FileLog::e(const char *message, ...) {
     if (!LOGS_ENABLED) {
         return;
     }
-    char buf[256];
-
     va_list argptr;
     va_start(argptr, message);
-    vsnprintf(buf, 256, message, argptr);
-    loge("tgnet", buf);
+    struct timeval time_now;
+    gettimeofday(&time_now, NULL);
+    struct tm *now = localtime(&time_now.tv_sec);
+#ifdef ANDROID
+    __android_log_vprint(ANDROID_LOG_ERROR, "tgnet", message, argptr);
+    va_end(argptr);
+    va_start(argptr, message);
+#else
+    printf("%d-%d %02d:%02d:%02d error: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+    vprintf(message, argptr);
+    printf("\n");
+    fflush(stdout);
+    va_end(argptr);
+    va_start(argptr, message);
+#endif
+    FILE *logFile = getInstance().logFile;
+    if (logFile) {
+        fprintf(logFile, "%d-%d %02d:%02d:%02d.%03d error: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec, (int) (time_now.tv_usec / 1000));
+        vfprintf(logFile, message, argptr);
+        fprintf(logFile, "\n");
+        fflush(logFile);
+    }
+    
     va_end(argptr);
 }
 
@@ -73,12 +114,31 @@ void FileLog::w(const char *message, ...) {
     if (!LOGS_ENABLED) {
         return;
     }
-    char buf[256];
-
     va_list argptr;
     va_start(argptr, message);
-    vsnprintf(buf, 256, message, argptr);
-    logw("tgnet", buf);
+    struct timeval time_now;
+    gettimeofday(&time_now, NULL);
+    struct tm *now = localtime(&time_now.tv_sec);
+#ifdef ANDROID
+    __android_log_vprint(ANDROID_LOG_WARN, "tgnet", message, argptr);
+    va_end(argptr);
+    va_start(argptr, message);
+#else
+    printf("%d-%d %02d:%02d:%02d warning: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+    vprintf(message, argptr);
+    printf("\n");
+    fflush(stdout);
+    va_end(argptr);
+    va_start(argptr, message);
+#endif
+    FILE *logFile = getInstance().logFile;
+    if (logFile) {
+        fprintf(logFile, "%d-%d %02d:%02d:%02d.%03d warning: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec, (int) (time_now.tv_usec / 1000));
+        vfprintf(logFile, message, argptr);
+        fprintf(logFile, "\n");
+        fflush(logFile);
+    }
+    
     va_end(argptr);
 }
 
@@ -86,12 +146,32 @@ void FileLog::d(const char *message, ...) {
     if (!LOGS_ENABLED) {
         return;
     }
-    char buf[256];
-
     va_list argptr;
     va_start(argptr, message);
-    vsnprintf(buf, 256, message, argptr);
-    logd("tgnet", buf);
+
+    struct timeval time_now;
+    gettimeofday(&time_now, NULL);
+    struct tm *now = localtime(&time_now.tv_sec);
+#ifdef ANDROID
+    __android_log_vprint(ANDROID_LOG_DEBUG, "tgnet", message, argptr);
+    va_end(argptr);
+    va_start(argptr, message);
+#else
+    printf("%d-%d %02d:%02d:%02d debug: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec);
+    vprintf(message, argptr);
+    printf("\n");
+    fflush(stdout);
+    va_end(argptr);
+    va_start(argptr, message);
+#endif
+    FILE *logFile = getInstance().logFile;
+    if (logFile) {
+        fprintf(logFile, "%d-%d %02d:%02d:%02d.%03d debug: ", now->tm_mon + 1, now->tm_mday, now->tm_hour, now->tm_min, now->tm_sec, (int) (time_now.tv_usec / 1000));
+        vfprintf(logFile, message, argptr);
+        fprintf(logFile, "\n");
+        fflush(logFile);
+    }
+    
     va_end(argptr);
 }
 
